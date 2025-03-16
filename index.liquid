@@ -1,7 +1,46 @@
 ---
 layout: layout.liquid
-title: 11ty Boilerplate
+title: Books
 ---
 
-<h1>Yet Another 11ty <strong>Boilerplate</strong></h1>
-<img alt="pine" src="/images/pine.png" width="50" />
+
+<table border="1" id="books">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>ISBN</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  </tbody>
+</table>
+
+
+<!-- AI Usage Citation:
+I used Google Gemini to troubleshoot a problem I had with the code. My table wasn't displaying properly.
+I gave it my code and asked it to tell me what was wrong. It had me add the <tbody> tag to my table along 
+with <thead> and it had me add type="module" to the script tag.
+-->
+
+<script type="module">
+    import { createClient } from "https://cdn.skypack.dev/@supabase/supabase-js";
+
+    const supabaseUrl = 'https://swglkhdqorchvuqrjopg.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN3Z2xraGRxb3JjaHZ1cXJqb3BnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxNDg4NzQsImV4cCI6MjA1NzcyNDg3NH0.5XBH299ItwbA_T66c1l7uoSe4ynQLJ5iamRqIfLC9gk'
+    const supabase = createClient(supabaseUrl, supabaseKey)
+    
+    async function getBooks() {
+        let { data: books, error } = await supabase
+        .from('books')
+        .select('*')
+        
+        for (let book of books) {
+            let bookList = document.getElementById("books");
+            bookList.innerHTML += `<tr><td>${book.Title}</td><td>${book.Author}</td><td>${book.ISBN}</td></tr>`;
+        }
+    }
+    
+    getBooks();
+</script>
